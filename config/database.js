@@ -1,9 +1,8 @@
-'use strict';
+"use strict";
 
-const mysql = require('mysql');
+const mysql = require("mysql");
 
-const conexion= mysql.createConnection({
- const connection = mysql.createConnection({
+const conexion = mysql.createConnection({
   host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "",
@@ -11,10 +10,12 @@ const conexion= mysql.createConnection({
   port: process.env.DB_PORT || 3306,
 });
 
+conexion.connect((err) => {
+  if (err) {
+    console.error("Error al conectar a la base de datos:", err);
+    return;
+  }
+  console.log(" Conexión exitosa a la base de datos.");
+});
 
-});
-conexion.connect(function(err){
-    if(err)throw err;
-    console.log('Conexion Exitosas a BD');
-});
-module.exports=conexion;
+module.exports = conexion;
