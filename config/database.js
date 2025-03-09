@@ -1,19 +1,37 @@
 const mysql = require("mysql");
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,  // No debe ser "localhost" en Railway
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306,
-});
+const dbConfig = {
+  host: process.env.MYSQLHOST, 
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQL_ROOT_PASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: process.env.MYSQLPORT || 3306,
+};
 
-connection.connect((err) => {
-  if (err) {
-    console.error("🚨 Error al conectar a la BD:", err);
-    return;
-  }
-  console.log("✅ Conexión exitosa a la BD");
-});
+let connection;
+
+function handleDisconnect() {
+  connection = mysql.createConnection(dbConfig);
+
+  connection.connect((err) => {
+    if (err) {
+      console.error("🚨 Error al conectar a la BD:", err);
+      setTimeout(handleDisconnect, 5000); // Reintentar conexión en 5 segundos
+    } else {
+      console.log("✅ Conexión exitosa a la BD");
+    }
+  });
+
+  connection.on("error", (err) => {
+    console.error("🚨 Error en la conexión:", err);
+    if (err.code === "PROTOCOL_CONNECTION_LOST") {
+      handleDisconnect(); // Reconectar en caso de desconexión
+    } else {
+      throw err;
+    }
+  });
+}
+
+handleDisconnect();
 
 module.exports = connection;
