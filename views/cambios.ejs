@@ -112,9 +112,9 @@
     fetch("/alumnos/" + id)
       .then(response => response.ok ? response.json() : Promise.reject("Error al obtener datos"))
       .then(data => {
-        console.log("Datos recibidos:", data); // Verifica la estructura de la respuesta
+        console.log("Datos recibidos:", data); 
 
-        // Si la respuesta es un array, toma el primer elemento
+     
         if (Array.isArray(data)) {
           data = data[0];
         }
