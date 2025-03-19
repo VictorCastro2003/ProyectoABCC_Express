@@ -1,16 +1,20 @@
 'use strict';
+const mysql = require('mysql2'); // Cambia a mysql2
 
-const mysql = require('mysql');
-
-const conexion= mysql.createConnection({
-    host:'localhost',
-    user:'victorcastro',
-    password:'itsj',
-    database:'BD_Express_2025'
-
+const conexion = mysql.createConnection({
+  host: 'switchback.proxy.rlwy.net',
+  user: 'root',
+  password: 'bkWXOWIuTbRWPOGYkfUqfRjGIptdbcRf',
+  database: 'railway',
+  port: 51644,
 });
-conexion.connect(function(err){
-    if(err)throw err;
-    console.log('Conexion Exitosas a BD');
+
+conexion.connect(function (err) {
+  if (err) {
+    console.error('Error al conectar a la base de datos:', err);
+  } else {
+    console.log('✅ Conexión exitosa a MySQL');
+  }
 });
-module.exports=conexion;
+
+module.exports = conexion;
